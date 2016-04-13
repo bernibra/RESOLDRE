@@ -2,9 +2,9 @@
 % Please edit documentation in R/RcppExports.R
 \name{randomize}
 \alias{randomize}
-\title{Fill the matrix with ones}
+\title{Randomize}
 \usage{
-randomize(x)
+randomize(x, pmat, unilinks_null, bilinks_null, N, fprob)
 }
 \arguments{
 \item{x}{A matrix}

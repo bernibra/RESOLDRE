@@ -5,7 +5,7 @@
 \title{Main program}
 \usage{
 resoldre(mat = NULL, pmat = NULL, cormed = NULL, randomizations = 1,
-  verbose = FALSE)
+  verbose = FALSE, seed = NULL, fprob = 0)
 }
 \arguments{
 \item{cormed}{A correlation-informed matrix used to bias the randomization.}
