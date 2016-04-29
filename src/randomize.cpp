@@ -46,7 +46,6 @@ int check_biswap(NumericMatrix x, NumericMatrix pmat, double (*dfunc)(double,dou
     //Checking that we are not selecting the same interaction
     return 0;
   } else if ( unif_rand()>=prob ){
-    Rcout << "Buyaaa! " << std::endl;
     return 0;
   } else if ( links(rn1,rn3)==links(rn2,rn4) ){
     //Case in which nothing changes
@@ -155,4 +154,3 @@ List randomize(NumericMatrix x, NumericMatrix pmat, Nullable<NumericMatrix> unil
   PutRNGstate();
   return List::create(Named("matrix") = mat, Named("swaps") = swaps );
 }
-

@@ -78,10 +78,13 @@ resoldre <- function(mat = NULL, pmat = NULL, cormed = NULL, randomizations = 1,
 
   }
 
-  newmat <- randomize(mat, unilinks, bilinks, 1)
+  newmat <- randomize(mat, pmat, unilinks, bilinks, 1, fprob)
 
 
   return(list(mat=newmat, pmat, unilinks=univec, bilinks=bilinks, nperms, fprob))
 }
 
+# .onUnload <- function (libpath) {
+#   library.dynam.unload("RESOLDRE", libpath)
+# }
 

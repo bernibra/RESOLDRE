@@ -6,9 +6,9 @@ Version: 0.1
 Date: 2016-03-24
 Author: Bernat Bramon Mora
 Maintainer: Bernat Bramon Mora <bernat.bramon@gmail.com>
-LinkingTo: Rcpp
+LinkingTo: Rcpp, RcppArmadillo
 Imports:
-    Rcpp
+    Rcpp,
 License: What license is it under?
 LazyData: TRUE
 RoxygenNote: 5.0.1
