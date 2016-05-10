@@ -2,16 +2,11 @@
 % Please edit documentation in R/RcppExports.R
 \name{B_est}
 \alias{B_est}
-\title{PGLMM}
+\title{B_estim}
 \usage{
 B_est(Y, X, Zi, Zr, mur, B, br, XX, ss, tolpql, maxitpql)
 }
-\arguments{
-\item{x}{A matrix}
-
-\item{vcv}{A matrix}
-}
 \description{
-PGLMM
+B_estim
 }
 

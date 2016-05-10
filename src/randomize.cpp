@@ -6,7 +6,7 @@
 using namespace Rcpp;
 
 // Checking a proposed single link swap
-int check_uniswap(NumericMatrix x, NumericMatrix pmat, double (*dfunc)(double,double,double,double), NumericMatrix links, int rn1, int rn2){
+int check_unipartite_uniswap(NumericMatrix x, NumericMatrix pmat, double (*dfunc)(double,double,double,double), NumericMatrix links, int rn1, int rn2){
   double prob=dfunc( pmat(links(rn1,0),links(rn2,1)) , pmat(links(rn1,0),links(rn1,1)) , pmat(links(rn2,0),links(rn1,1)) , pmat(links(rn2,0),links(rn2,1)));
   if (rn1==rn2){
     //checking that we haven't got the same random number
@@ -14,7 +14,7 @@ int check_uniswap(NumericMatrix x, NumericMatrix pmat, double (*dfunc)(double,do
   } else if ( unif_rand()>=prob ){
     return 0;
   } else if ( links(rn1,0)==links(rn2,0) || links(rn1,1)==links(rn2,1) ){
-    //checking whether this change don't modify the interaction matrix
+    //checking if this change don't modify the interaction matrix
     return 1;
   } else if ( links(rn1,0)==links(rn2,1) || links(rn2,0)==links(rn1,1) ){
     //checking that we don't create a cannibal link
@@ -40,7 +40,7 @@ int check_uniswap(NumericMatrix x, NumericMatrix pmat, double (*dfunc)(double,do
 }
 
 // Checking a proposed double link swap
-int check_biswap(NumericMatrix x, NumericMatrix pmat, double (*dfunc)(double,double,double,double), NumericMatrix links, int rn1, int rn2, int rn3, int rn4){
+int check_unipartite_biswap(NumericMatrix x, NumericMatrix pmat, double (*dfunc)(double,double,double,double), NumericMatrix links, int rn1, int rn2, int rn3, int rn4){
   double prob=dfunc( pmat(links(rn1,rn3),links(rn2,1-rn4)) , pmat(links(rn1,rn3),links(rn1,1-rn3)) , pmat(links(rn2,rn4),links(rn1,1-rn3)) , pmat(links(rn2,rn4),links(rn2,1-rn4)));
   if ( rn1==rn2 ){
     //Checking that we are not selecting the same interaction
@@ -78,6 +78,35 @@ int check_biswap(NumericMatrix x, NumericMatrix pmat, double (*dfunc)(double,dou
   }
 }
 
+// Checking a proposed single link swap
+int check_bipartite(NumericMatrix x, NumericMatrix pmat, double (*dfunc)(double,double,double,double), NumericMatrix links, int rn1, int rn2){
+  double prob=dfunc( pmat(links(rn1,0),links(rn2,1)) , pmat(links(rn1,0),links(rn1,1)) , pmat(links(rn2,0),links(rn1,1)) , pmat(links(rn2,0),links(rn2,1)));
+  if (rn1==rn2){
+    //checking that we haven't got the same random number
+    return 0;
+  } else if ( unif_rand()>=prob ){
+    return 0;
+  } else if ( links(rn1,0)==links(rn2,0) || links(rn1,1)==links(rn2,1) ){
+    //checking if this change don't modify the interaction matrix
+    return 1;
+  } else if ( x(links(rn1,0),links(rn2,1))==1 ||
+    x(links(rn2,0),links(rn1,1))==1 ){
+    //Checking that the new elements or their permutations aren't already present in the links list
+    return 0;
+  } else {
+    x(links(rn1,0),links(rn2,1))=1;
+    x(links(rn1,0),links(rn1,1))=0;
+    x(links(rn2,0),links(rn1,1))=1;
+    x(links(rn2,0),links(rn2,1))=0;
+
+    links(rn1,1)=links(rn1,1)+links(rn2,1);
+    links(rn2,1)=links(rn1,1)-links(rn2,1);
+    links(rn1,1)=links(rn1,1)-links(rn2,1);
+
+    return 1;
+  }
+}
+
 // Random integer
 int randint(int size){
   return unif_rand()*size;
@@ -102,13 +131,13 @@ double probability_all(double p11, double p12, double p21, double p22){
 }
 
 
-//'Randomize
+//'Randomize unipartite networks
 //'
 //'Fill the matrix with ones
 //'@param x A matrix
 //'@export
 // [[Rcpp::export]]
-List randomize(NumericMatrix x, NumericMatrix pmat, Nullable<NumericMatrix> unilinks_null, Nullable<NumericMatrix> bilinks_null, int N, int fprob){
+NumericMatrix randomize_unipartite(NumericMatrix x, NumericMatrix pmat, Nullable<NumericMatrix> unilinks_null, Nullable<NumericMatrix> bilinks_null, int N, int fprob){
 
   GetRNGstate();
   double puni, pbi;
@@ -130,7 +159,8 @@ List randomize(NumericMatrix x, NumericMatrix pmat, Nullable<NumericMatrix> unil
   }
 
   if (puni+pbi == 0){
-    return List::create(Named("matrix") = x, Named("swaps") = 1 );
+    // return List::create(Named("matrix") = x, Named("swaps") = 0 );
+      return x;
   } else {
     puni = puni/(double)(puni+pbi);
   }
@@ -145,12 +175,53 @@ List randomize(NumericMatrix x, NumericMatrix pmat, Nullable<NumericMatrix> unil
 
   for (int j=0; j<N; j++) {
     if(unif_rand()<puni){
-      swaps=swaps+check_uniswap(mat, pmat, dfunc, unilinks,randint(unilinks.nrow()),randint(unilinks.nrow()));
+      swaps=swaps+check_unipartite_uniswap(mat, pmat, dfunc, unilinks,randint(unilinks.nrow()),randint(unilinks.nrow()));
     } else{
-      swaps=swaps+check_biswap(mat, pmat, dfunc, bilinks,randint(bilinks.nrow()),randint(bilinks.nrow()),randint(2),randint(2));
+      swaps=swaps+check_unipartite_biswap(mat, pmat, dfunc, bilinks,randint(bilinks.nrow()),randint(bilinks.nrow()),randint(2),randint(2));
     }
   }
 
   PutRNGstate();
-  return List::create(Named("matrix") = mat, Named("swaps") = swaps );
+//   return List::create(Named("matrix") = mat, Named("swaps") = swaps );
+  return mat;
+}
+
+
+//'Randomize unipartite networks
+//'
+//'Fill the matrix with ones
+//'@param x A matrix
+//'@export
+// [[Rcpp::export]]
+NumericMatrix randomize_bipartite(NumericMatrix x, NumericMatrix pmat, Nullable<NumericMatrix> unilinks_null, int N, int fprob){
+
+  GetRNGstate();
+  double puni, pbi;
+  double (*dfunc)(double,double,double,double);
+  int swaps=0;
+  NumericMatrix unilinks, mat=Rcpp::clone(x);
+
+  if (unilinks_null.isNotNull()) {
+    unilinks = Rcpp::clone(unilinks_null.get());
+  } else {
+//     return List::create(Named("matrix") = x, Named("swaps") = 0 );
+    return x;
+  }
+// #UNTILHERE!!!
+
+  if (fprob == 0){
+    dfunc=&probability_new;
+  } else if (fprob == 1){
+    dfunc=&probability_old;
+  } else {
+    dfunc=&probability_all;
+  }
+
+  for (int j=0; j<N; j++) {
+    swaps=swaps+check_bipartite(mat, pmat, dfunc, unilinks,randint(unilinks.nrow()),randint(unilinks.nrow()));
+  }
+
+  PutRNGstate();
+  // return List::create(Named("matrix") = mat, Named("swaps") = swaps );
+  return mat;
 }

@@ -3,31 +3,25 @@
 #' Probability estimation
 #' @return The probability matrix
 #' @export
-pglmm <- function(Y, vcv){
-  iter <- 0
-  max_iter <- 40
-  maxit <- 40
+pglmm <- function(Y, vcv, maxit=40, ss=0.1, tolpql=10^-6, maxitpql=200){
+
   spp <- nrow(vcv)
-  ss <- 0.002
-  tolpql <- 10^-6
-  maxitpql <- 200;
   X <- rep(1,length(Y))
   Zi <- diag(spp)
   XX <- diag(spp)
   b <- rep(1,spp)
+
   Zi <- chol(vcv) %*% Zi
   B <- mean(Y)
   B <- log(B/(1-B))
   mu <- exp(X * B)/(1 + exp(X * B))
+  Z <- X * B
+
   estss <- ss
   estB <- B
   oldestss <- 10^6
   oldestB <- 10^6
   it <- 0
-  exitflag <- 0
-  rcondflag <- 0
-  Z <- X * B
-  nested <- list(NULL)
 
   while ((((estss - oldestss) * (estss - oldestss) > tolpql*tolpql) |
           ((estB - oldestB) * (estB - oldestB) > tolpql*tolpql)) & (it <= maxitpql)){
@@ -52,3 +46,47 @@ pglmm <- function(Y, vcv){
   return(mu)
 
 }
+
+#' Probability estimation
+#'
+#' Probability estimation
+#' @return The probability matrix
+#' @export
+probability_estimation <- function(mat, vcv, perspective = "rows", maxit=40, ss=0.01, tolpql=10^-6, maxitpql=200){
+
+  if (perspective=="rows"){
+    inter <- mat
+  } else{
+    inter <- t(mat)
+  }
+
+  prob <- c()
+  for (i in 1:ncol(inter)){
+    n <- sum(inter[,i])
+
+    if(n!=0){
+      result <- try(pglmm(Y = inter[,i], vcv = vcv, maxit = maxit, ss = ss, tolpql = tolpql, maxitpql = maxitpql), TRUE)
+    } else {
+      result <- rep(0,nrow(inter))
+    }
+
+    if (class(result) != "try-error"){
+      prob <- cbind(prob, matrix(result))
+    } else {
+      result <- try(pglmm(Y = inter[,i], vcv = vcv, maxit = maxit, ss = 0, tolpql = tolpql, maxitpql = maxitpql), TRUE)
+      if (class(result) != "try-error"){
+        prob <- cbind(prob, matrix(result))
+      } else {
+        warning("Estimation of B failed. Check for lack of variation in Y. You could try with a smaller s2.init, but this might not help.")
+        prob <- cbind(prob, matrix(rep(n*1.0/nrow(inter), nrow(inter))))
+      }
+    }
+  }
+
+  if (perspective=="columns"){
+    prob <- t(prob)
+  }
+
+  return(prob)
+}
+

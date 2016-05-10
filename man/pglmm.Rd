@@ -4,7 +4,7 @@
 \alias{pglmm}
 \title{Base pglmm}
 \usage{
-pglmm(Y, vcv)
+pglmm(Y, vcv, maxit = 40, ss = 0.1, tolpql = 10^-6, maxitpql = 200)
 }
 \value{
 The probability matrix
