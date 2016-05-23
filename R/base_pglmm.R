@@ -69,16 +69,20 @@ probability_estimation <- function(mat, vcv, perspective = "rows", maxit=40, ss=
     } else {
       result <- rep(0,nrow(inter))
     }
-
     if (class(result) != "try-error"){
-      prob <- cbind(prob, matrix(result))
+      prob <- cbind(prob, matrix(result)*(1./n))
     } else {
-      result <- try(pglmm(Y = inter[,i], vcv = vcv, maxit = maxit, ss = 0, tolpql = tolpql, maxitpql = maxitpql), TRUE)
+      result <- try(pglmm(Y = inter[,i], vcv = vcv, maxit = maxit, ss = 10^-10, tolpql = tolpql, maxitpql = maxitpql), TRUE)
       if (class(result) != "try-error"){
-        prob <- cbind(prob, matrix(result))
+        prob <- cbind(prob, matrix(result)*(1./n))
       } else {
-        warning("Estimation of B failed. Check for lack of variation in Y. You could try with a smaller s2.init, but this might not help.")
-        prob <- cbind(prob, matrix(rep(n*1.0/nrow(inter), nrow(inter))))
+        result <- try(pglmm(Y = inter[,i], vcv = vcv, maxit = maxit, ss = 0, tolpql = tolpql, maxitpql = maxitpql), TRUE)
+        if (class(result) != "try-error"){
+          prob <- cbind(prob, matrix(result)*(1./n))
+        }else{
+          warning(paste("Estimation of B failed. Check for lack of variation in Y. You could try with a smaller s2.init, but this might not help. This is ", perspective, as.character(i), sep=""))
+          prob <- cbind(prob, matrix(rep(1.0/nrow(inter), nrow(inter))))
+        }
       }
     }
   }

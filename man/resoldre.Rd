@@ -6,8 +6,8 @@
 \usage{
 resoldre(mat = NULL, pmat = NULL, cormed = NULL, randomizations = 1,
   bipartite = FALSE, seed = NULL, nperm = 100, perspective = "rows",
-  fprob = 0, maxit = 40, ss = 0.1, tolpql = 10^-6, maxitpql = 200,
-  f = NULL, ...)
+  degree = NULL, fprob = 0, maxit = 40, ss = 0.1, tolpql = 10^-6,
+  maxitpql = 200, f = NULL, ...)
 }
 \arguments{
 \item{cormed}{A correlation-informed matrix used to bias the randomization.}

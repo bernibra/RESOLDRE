@@ -6,7 +6,7 @@
 #' @return The result of the randomization in some way...
 #' @export
 resoldre <- function(mat = NULL, pmat = NULL, cormed = NULL, randomizations = 1,
-                     bipartite = FALSE, seed=NULL, nperm=100, perspective="rows", fprob=0,
+                     bipartite = FALSE, seed=NULL, nperm=100, perspective="rows", degree=NULL, fprob=0,
                      maxit=40, ss=0.1, tolpql=10^-6, maxitpql=200, f=NULL, ...){
 
   #Input checks
@@ -14,8 +14,16 @@ resoldre <- function(mat = NULL, pmat = NULL, cormed = NULL, randomizations = 1,
   if(perspective!="rows" & perspective!="columns"){
     stop(gettextf("'perspective' should be one of %s", paste(dQuote(c("rows","columns")), collapse = ", ")), domain = NA)
   }
+
+  if (!is.null(degree)) {
+    if(degree!="rows" & degree!="columns" & degree!="both"){
+      stop(gettextf("'degree' should be one of %s", paste(dQuote(c("rows","columns", "both")), collapse = ", ")), domain = NA)
+    }
+  }
+
   if(is.matrix(mat)){
     if(any(mat!=1 & mat!=0)){stop("The target matrix 'mat' must be an interaction matrix.")}
+    if(!any(mat>0)){stop("'mat' can't be a null matrix.")}
     if(nrow(mat)!=ncol(mat) & !bipartite){stop("'mat' must be a square matrix unless you specify 'bipartite=TRUE'.")}
   }else{
       stop("'mat' must be a matrix")
@@ -25,7 +33,11 @@ resoldre <- function(mat = NULL, pmat = NULL, cormed = NULL, randomizations = 1,
   }else{
     if(!is.null(cormed) & !is.null(pmat)){
       if(is.matrix(pmat) & nrow(pmat)==nrow(mat) & ncol(pmat)==ncol(mat)){
-        warning("'cormed' will be ignored because you have already provided 'pmat'.")
+        if (any(pmat>0)) {
+          warning("'cormed' will be ignored because you have already provided 'pmat'.")
+        } else{
+          warning("'pmat' can't be a null matrix.")
+        }
       }else{
         stop("'pmat' must be a matrix with the same dimensions as 'mat'.")
       }
@@ -33,6 +45,8 @@ resoldre <- function(mat = NULL, pmat = NULL, cormed = NULL, randomizations = 1,
     if(is.null(cormed)){
       if(!is.matrix(pmat) | nrow(pmat)!=nrow(mat) | ncol(pmat)!=ncol(mat)){
         stop("'pmat' must be a matrix with the same dimensions as 'mat'.")
+      } else{
+        if (!any(pmat>0)) {warning("'pmat' can't be a null matrix.")}
       }
     }else{
       if(is.matrix(cormed) & nrow(cormed)==ncol(cormed)){
@@ -59,13 +73,28 @@ resoldre <- function(mat = NULL, pmat = NULL, cormed = NULL, randomizations = 1,
   links <- which(mat>0, arr.ind = TRUE)
 
   if(bipartite){
+
+    if(degree=="both"){
+      type <- 1
+    }else if(degree=="rows"){
+      type <- 2
+    }else{
+      type <- 3
+    }
+
     links <- links-1
     if(!is.null(f)){
-      results <- lapply(1:randomizations, function(x) f(randomize_bipartite(mat, pmat, links, nperm, fprob),...))
+      results <- lapply(1:randomizations, function(x) f(randomize(mat, pmat, links, NULL, nperm, type, fprob),...))
     }else{
-      results <- lapply(1:randomizations, function(x) randomize_bipartite(mat, pmat, links, nperm, fprob))
+      results <- lapply(1:randomizations, function(x) randomize(mat, pmat, links, NULL, nperm, type, fprob))
     }
+
   }else{
+
+    type <- 0
+    if(!is.null(degree)){
+      warning("'degree' will be ignored because 'bipartite=FALSE'")
+    }
 
     unilinks <- c()
     bilinks <- c()
@@ -84,9 +113,9 @@ resoldre <- function(mat = NULL, pmat = NULL, cormed = NULL, randomizations = 1,
     if(length(bilinks)==0){bilinks <- NULL}else{bilinks <- bilinks-1}
 
     if(!is.null(f)){
-      results <- lapply(1:randomizations, function(x) f(randomize_unipartite(mat, pmat, unilinks, bilinks, nperm, fprob),...))
+      results <- lapply(1:randomizations, function(x) f(randomize(mat, pmat, unilinks, bilinks, nperm, type, fprob),...))
     }else{
-      results <- lapply(1:randomizations, function(x) randomize_unipartite(mat, pmat, unilinks, bilinks, nperm, fprob))
+      results <- lapply(1:randomizations, function(x) randomize(mat, pmat, unilinks, bilinks, nperm, type, fprob))
     }
   }
 
