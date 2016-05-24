@@ -260,7 +260,7 @@ NumericMatrix randomize(NumericMatrix x, NumericMatrix pmat, Nullable<NumericMat
     }
 
   } else{
-    // type=2 -> Preserve colum degree
+    // type=3 -> Preserve colum degree
 
     while (swaps<N){
       swaps=swaps+check_bipartite_columns(mat, pmat, unilinks,randint(unilinks.nrow()),randint(mat.nrow()));
