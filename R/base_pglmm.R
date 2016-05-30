@@ -35,7 +35,7 @@ pglmm <- function(Y, vcv, maxit=40, ss=0.1, tolpql=10^-6, maxitpql=200){
 
           H <- Z - X * B
 
-          opt <- optim(fn = plmm_binary_LL, par = ss, H=H, X=X, Zi=Zi, mu=mu, method = "L-BFGS-B",lower = 0, upper = 100, control = list(maxit = maxit))
+          opt <- optim(fn = plmm_binary_LL, par = ss, H=H, X=X, Zi=Zi, mu=mu, method = "L-BFGS-B", control = list(maxit = maxit))
 
           ss <- abs(opt$par)
           LL <- opt$value
@@ -94,4 +94,3 @@ probability_estimation <- function(mat, vcv, perspective = "rows", maxit=40, ss=
 
   return(prob)
 }
-
