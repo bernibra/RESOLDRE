@@ -35,7 +35,11 @@ pglmm <- function(Y, vcv, maxit=40, ss=0.1, tolpql=10^-6, maxitpql=200){
 
           H <- Z - X * B
 
-          opt <- optim(fn = plmm_binary_LL, par = ss, H=H, X=X, Zi=Zi, mu=mu, method = "L-BFGS-B", control = list(maxit = maxit))
+          opt <- try(optim(fn = plmm_binary_LL, par = ss, H=H, X=X, Zi=Zi, mu=mu, method = "L-BFGS-B", control = list(maxit = maxit)), TRUE)
+
+          if (class(opt) == "try-error"){
+            stop("Estimation of ss failed. You could try with a smaller s2.init, but this might not help.")
+          }
 
           ss <- abs(opt$par)
           LL <- opt$value
@@ -54,6 +58,8 @@ pglmm <- function(Y, vcv, maxit=40, ss=0.1, tolpql=10^-6, maxitpql=200){
 #' @export
 probability_estimation <- function(mat, vcv, perspective = "rows", maxit=40, ss=0.01, tolpql=10^-6, maxitpql=200){
 
+  sstry <- unique(c(ss,0.1,0.01,0.5,10^-5,10^-10))
+
   if (perspective=="rows"){
     inter <- mat
   } else{
@@ -65,22 +71,16 @@ probability_estimation <- function(mat, vcv, perspective = "rows", maxit=40, ss=
     n <- sum(inter[,i])
 
     if(n!=0){
-      result <- try(pglmm(Y = inter[,i], vcv = vcv, maxit = maxit, ss = ss, tolpql = tolpql, maxitpql = maxitpql)*(1./n), TRUE)
-      if (class(result) != "try-error"){
-        prob <- cbind(prob, matrix(result, nrow(inter),1))
-      } else {
-        result <- try(pglmm(Y = inter[,i], vcv = vcv, maxit = maxit, ss = 10^-10, tolpql = tolpql, maxitpql = maxitpql)*(1./n), TRUE)
+      for(k in 1:length(sstry)){
+        result <- try(pglmm(Y = inter[,i], vcv = vcv, maxit = maxit, ss = sstry[k], tolpql = tolpql, maxitpql = maxitpql)*(1./n), TRUE)
         if (class(result) != "try-error"){
           prob <- cbind(prob, matrix(result, nrow(inter),1))
-        } else {
-          result <- try(pglmm(Y = inter[,i], vcv = vcv, maxit = maxit, ss = 0, tolpql = tolpql, maxitpql = maxitpql)*(1./n), TRUE)
-          if (class(result) != "try-error"){
-            prob <- cbind(prob, matrix(result, nrow(inter),1))
-          }else{
-            warning(paste("Estimation of B failed. Check for lack of variation in Y. You could try with a smaller s2.init, but this might not help. This is ", perspective, as.character(i), sep=""))
-            prob <- cbind(prob, matrix(rep(1.0/nrow(inter), nrow(inter)), nrow(inter),1))
-          }
+          break
         }
+      }
+      if (class(result) == "try-error"){
+        warning(paste("Estimation of B and ss failed. Check for lack of variation in Y. You could try with a smaller s2.init, but this might not help."))
+        prob <- cbind(prob, matrix(rep(1.0/nrow(inter), nrow(inter)), nrow(inter),1))
       }
     } else {
       result <- rep(0,nrow(inter))

@@ -1,8 +1,11 @@
-#' Main program
+#' Informed Randomizations
 #'
-#' Informed randomizations main script
-#' @param m A matrix to be randomized.
-#' @param cormed A correlation-informed matrix used to bias the randomization.
+#' This functions performs different type of randomization of an adjacency matrix given either a probability of correlation matrix.
+#' @usage resoldre(mat, pmat = NULL, cormed , randomizations = 1, bipartite = FALSE, seed=NULL, nperm=10^4, perspective="rows", degree=NULL, fprob=0, maxit=40, ss=0.1, tolpql=10^-6, maxitpql=200, f=NULL, ...)
+#' @param mat
+#' A matrix to be randomized.
+#' @param cormed
+#' A correlation matrix used to bias the randomization.
 #' @return The result of the randomization in some way...
 #' @export
 resoldre <- function(mat = NULL, pmat = NULL, cormed = NULL, randomizations = 1,

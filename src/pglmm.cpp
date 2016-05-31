@@ -64,7 +64,6 @@ double plmm_binary_LL(double par, const arma::colvec& H, const arma::colvec& X, 
   iV = iA - iA * U * inv(iV) * Ut * iA;
 
   LL = 0.5 * (LL + sum(H % (iV * H)) + log(std::abs(sum(X % (iV * X)))));
-
   return(LL);
 }
 
@@ -88,15 +87,12 @@ long double B_est(const arma::colvec& Y, const arma::colvec& X, const arma::mat&
     oldestBm = estBm;
     iV = plmm_binary_iV(ss, Zi, X, mu);
     Z = X * B + b + (Y - mu)/(mu % (1 - mu));
-    //Rcpp::Rcout << "   " << std::endl;
-    //Rcpp::Rcout << b[34] << " " << b[35] << " " <<  b[36] << " " << b[37] << B << std::endl;
     B = sum(X % ( iV * Z))/(long double)sum(X % ( iV * X));
     C = diagmat(1.0/(mu % (1 - mu)));
     C = plmm_binary_V(ss, Zi, X, C) - C;
     b = C * iV * (Z - X * B);
     mu = exp(XX * b + X * B)/(1 + exp(XX * b + X * B));
     estBm = B;
-    //Rcpp::Rcout << B << std::endl;
     if (isinf(B) | isnan(B)){
       Rcpp:stop("Estimation of B failed. Check for lack of variation in Y. You could try with a smaller s2.init, but this might not help.");
     }

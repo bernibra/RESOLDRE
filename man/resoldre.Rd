@@ -2,22 +2,19 @@
 % Please edit documentation in R/base.R
 \name{resoldre}
 \alias{resoldre}
-\title{Main program}
+\title{Informed Randomizations}
 \usage{
-resoldre(mat = NULL, pmat = NULL, cormed = NULL, randomizations = 1,
-  bipartite = FALSE, seed = NULL, nperm = 100, perspective = "rows",
-  degree = NULL, fprob = 0, maxit = 40, ss = 0.1, tolpql = 10^-6,
-  maxitpql = 200, f = NULL, ...)
+resoldre(mat, pmat = NULL, cormed , randomizations = 1, bipartite = FALSE, seed=NULL, nperm=10^4, perspective="rows", degree=NULL, fprob=0, maxit=40, ss=0.1, tolpql=10^-6, maxitpql=200, f=NULL, ...)
 }
 \arguments{
-\item{cormed}{A correlation-informed matrix used to bias the randomization.}
+\item{mat}{A matrix to be randomized.}
 
-\item{m}{A matrix to be randomized.}
+\item{cormed}{A correlation matrix used to bias the randomization.}
 }
 \value{
 The result of the randomization in some way...
 }
 \description{
-Informed randomizations main script
+This functions performs different type of randomization of an adjacency matrix given either a probability of correlation matrix.
 }
 
