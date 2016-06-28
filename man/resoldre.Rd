@@ -4,17 +4,46 @@
 \alias{resoldre}
 \title{Informed Randomizations}
 \usage{
-resoldre(mat, pmat = NULL, cormed , randomizations = 1, bipartite = FALSE, seed=NULL, nperm=10^4, perspective="rows", degree=NULL, fprob=0, maxit=40, ss=0.1, tolpql=10^-6, maxitpql=200, f=NULL, ...)
+resoldre(mat = NULL, pmat = NULL, cormed = NULL, randomizations = 1, bipartite = FALSE, seed=NULL, nperm=1, perspective="rows", degree=NULL, maxit=40, ss=0.1, tolpql=10^-6, maxitpql=200, f=NULL, ...)
 }
 \arguments{
-\item{mat}{A matrix to be randomized.}
+\item{mat}{an adjacency matrix to be randomized.}
 
-\item{cormed}{A correlation matrix used to bias the randomization.}
+\item{pmat}{an optional probability matrix defining the probability of encountering any of the possible interactions in the adjacency matrix. This should be unset if a correlation matrix is specified. If 'pmat' and 'cormed' are unset, this probability matrix is considered to be an all-ones matrix.}
+
+\item{cormed}{a correlation matrix used to bias the randomization. The dimensions of the matrix need to agree with the 'perspective' set for the randomization as well as the adjacency matrix 'mat'. Perfectly correlated pairs should contain the lowest elements of the matrix. If 'pmat' is set, 'cormed' will be ignored.}
+
+\item{randomizations}{an integer value specifying total number of randomizations.}
+
+\item{bipartite}{a logical value specifying whether or not 'mat' describes a unipartite or bipartite graph. It is set as FALSE by default.}
+
+\item{seed}{a single value setting a seed for the whole randomization process.}
+
+\item{nperm}{an integer value specifying the number of link swaps made by each randomization.}
+
+\item{perspective}{this parameter can be set to either "rows" or "columns" . It specifies the perspective taken for the estimation of the probability matrix if 'pmat' is NULL and 'cormed' is set (see details).}
+
+\item{degree}{this parameter determines if the randomizations preserve the degree of "columns", "rows" or "both".}
+
+\item{maxit}{a control parameter dictating the maximum number of iterations in the optimization.}
+
+\item{ss}{initial estimates of the parameter for the random effect that scales the variance (it's kind of unnecessary).}
+
+\item{tolpql}{a control parameter dictating the tolerance for convergence in the PQL estimates of the mean components of the binomial GLMM (it's kind of unnecessary).}
+
+\item{maxitpql}{a control parameter dictating the maximum number of iterations in the PQL estimates of the mean components of the binomial GLMM (it's kind of unnecessary).}
+
+\item{f}{a function to be applied to each randomized matrix.}
+
+\item{...}{optional arguments to f.}
 }
 \value{
 The result of the randomization in some way...
 }
 \description{
-This functions performs different type of randomization of an adjacency matrix given either a probability of correlation matrix.
+This functions performs different type of randomization of an adjacency matrix given either a probability or a correlation matrix.
+}
+\details{
+Given an n x m adjacency matrix and an m x m correlation matrix relating its columns, resoldre will estimate the probability of encountering any of possible interactions based on the columns correlation matrix if 'perspective' is set as "columns". Similarly, if 'cormed' is otherwise an n x n correlation matrix relating the columns of the adjacency matrix, 'perspective' needs to be set as "rows".
 }
 

@@ -2,7 +2,10 @@
 //' @importFrom Rcpp sourceCpp
 
 
-#include <Rcpp.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+
+#include "RcppArmadillo.h"
+
 using namespace Rcpp;
 
 // Checking a proposed single link swap. Preserve degree of both sides and the distribution of single, double and cannibal links.
@@ -18,7 +21,7 @@ int check_unipartite_uniswap(NumericMatrix x, NumericMatrix pmat, double (*dfunc
     return 0;
   } else if ( links(rn1,0)==links(rn2,0) || links(rn1,1)==links(rn2,1) ){
     //checking if this change don't modify the interaction matrix
-    return 1;
+    return 0;
   } else if ( links(rn1,0)==links(rn2,1) || links(rn2,0)==links(rn1,1) ){
     //checking that we don't create a cannibal link
     return 0;
@@ -56,7 +59,7 @@ int check_unipartite_biswap(NumericMatrix x, NumericMatrix pmat, double (*dfunc)
     return 0;
   } else if ( links(rn1,rn3)==links(rn2,rn4) ){
     //Case in which nothing changes
-    return 1;
+    return 0;
   } else if ( x(links(rn2,rn4),links(rn1,1-rn3))==1 ||
     x(links(rn1,rn3),links(rn2,1-rn4))==1 ||
     x(links(rn1,1-rn3),links(rn2,rn4))==1 ||
@@ -171,6 +174,19 @@ int randint(int size){
   return unif_rand()*size;
 }
 
+double sampl(int nOrig, arma::vec &prob, arma::uvec &perm){
+  double rU;
+  int  jj;
+  int nOrig_1 = nOrig - 1;
+
+  rU = unif_rand()*prob[nOrig_1];
+  for (jj = 0; jj < nOrig_1; jj++) {
+    if (rU <= prob[jj])
+      break;
+  }
+  return perm[jj];
+}
+
 double probability_new(double p11, double p12, double p21, double p22){
   // Given: A <- B; C <- D
   //p11=p(A <- D); p12=p(A <- B); p21=p(C <- B); p22=p(C <- D);
@@ -196,7 +212,7 @@ double probability_all(double p11, double p12, double p21, double p22){
 //'@param x A matrix
 //'@export
 // [[Rcpp::export]]
-NumericMatrix randomize(NumericMatrix x, NumericMatrix pmat, Nullable<NumericMatrix> unilinks_null, Nullable<NumericMatrix> bilinks_null, int N, int type, int fprob){
+NumericMatrix randomize(NumericMatrix x, NumericMatrix pmat, Nullable<NumericMatrix> unilinks_null, Nullable<NumericMatrix> bilinks_null, int N, int type, int fprob, arma::vec degree){
 
   GetRNGstate();
   double puni, pbi;
@@ -255,15 +271,25 @@ NumericMatrix randomize(NumericMatrix x, NumericMatrix pmat, Nullable<NumericMat
   } else if (type==2){
     // type=2 -> Preserve row degree
 
+    arma::uvec perm = arma::sort_index(degree, 1); //descending sort of index
+    degree = arma::sort(degree, 1);  // descending sort of prob
+    // cumulative probabilities
+    degree = arma::cumsum(degree);
+
     while (swaps<N){
-      swaps=swaps+check_bipartite_rows(mat, pmat, unilinks,randint(unilinks.nrow()),randint(mat.ncol()));
+      swaps=swaps+check_bipartite_rows(mat, pmat, unilinks,randint(unilinks.nrow()),sampl(mat.ncol(), degree, perm));
     }
 
   } else{
     // type=3 -> Preserve colum degree
 
+    arma::uvec perm = arma::sort_index(degree, 1); //descending sort of index
+    degree = arma::sort(degree, 1);  // descending sort of prob
+    // cumulative probabilities
+    degree = arma::cumsum(degree);
+
     while (swaps<N){
-      swaps=swaps+check_bipartite_columns(mat, pmat, unilinks,randint(unilinks.nrow()),randint(mat.nrow()));
+      swaps=swaps+check_bipartite_columns(mat, pmat, unilinks,randint(unilinks.nrow()),sampl(mat.nrow(), degree, perm));
     }
 
   }

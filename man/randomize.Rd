@@ -4,7 +4,7 @@
 \alias{randomize}
 \title{Randomize unipartite networks}
 \usage{
-randomize(x, pmat, unilinks_null, bilinks_null, N, type, fprob)
+randomize(x, pmat, unilinks_null, bilinks_null, N, type, fprob, degree)
 }
 \arguments{
 \item{x}{A matrix}
