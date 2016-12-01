@@ -19,7 +19,7 @@
 #' @param perspective
 #' this parameter can be set to either "rows" or "columns" . It specifies the perspective taken for the estimation of the probability matrix if 'pmat' is NULL and 'cormed' is set (see details).
 #' @param degree
-#' this parameter determines if the randomizations preserve the degree of "columns", "rows" or "both".
+#' this parameter determines if the randomizations preserve the degree of "columns", "rows", "both" or "sample".
 #' @param maxit
 #' a control parameter dictating the maximum number of iterations in the optimization.
 #' @param ss
@@ -52,8 +52,8 @@ resoldre <- function(mat = NULL, pmat = NULL, cormed = NULL, randomizations = 1,
   }
 
   if (!is.null(degree)) {
-    if(degree!="rows" & degree!="columns" & degree!="both"){
-      stop(gettextf("'degree' should be one of %s", paste(dQuote(c("rows","columns", "both")), collapse = ", ")), domain = NA)
+    if(degree!="rows" & degree!="columns" & degree!="both" & degree!="sample"){
+      stop(gettextf("'degree' should be one of %s", paste(dQuote(c("rows","columns", "both", "sample")), collapse = ", ")), domain = NA)
     }
   }
 
@@ -109,56 +109,70 @@ resoldre <- function(mat = NULL, pmat = NULL, cormed = NULL, randomizations = 1,
   #I should do this for all the probability functions
   pmat <- pmat*1./max(pmat)
 
+  if(degree=="sample"){
 
-  links <- which(mat>0, arr.ind = TRUE)
+    random <- matrix(0,nrow(mat), ncol(mat))
+    links <- which(random==0, arr.ind = TRUE)
+    pmat <- (rowSums(mat) %*% t(colSums(mat))) * pmat
 
-  if(bipartite){
-
-    if(degree=="both"){
-      type <- 1
-      degree <- matrix(0,0,0)
-    }else if(degree=="rows"){
-      type <- 2
-      degree <- colSums(mat)
-    }else{
-      type <- 3
-      degree <- rowSums(mat)
-    }
-
-    links <- links-1
     if(!is.null(f)){
-      results <- lapply(1:randomizations, function(x) f(randomize(mat, pmat, links, NULL, nperm, type, fprob, degree = degree),...))
+      results <- lapply(1:randomizations, function(x) f(psample(pmat, sum(mat), random, links),...))
     }else{
-      results <- lapply(1:randomizations, function(x) randomize(mat, pmat, links, NULL, nperm, type, fprob, degree = degree))
+      results <- lapply(1:randomizations, function(x) psample(pmat, sum(mat), random, links))
     }
 
   }else{
 
-    type <- 0
-    if(!is.null(degree)){
-      warning("'degree' will be ignored because 'bipartite=FALSE'")
-    }
+    links <- which(mat>0, arr.ind = TRUE)
 
-    unilinks <- c()
-    bilinks <- c()
+    if(bipartite){
 
-    for(i in 1:nrow(links)){
-      if(links[i,1]==links[i,2]){
-        next
-      }else if(mat[links[i,1],links[i,2]]==mat[links[i,2],links[i,1]] & links[i,1]<links[i,2]){
-        bilinks <- rbind(bilinks,c(links[i,1],links[i,2]))
-      }else if(mat[links[i,1],links[i,2]]!=mat[links[i,2],links[i,1]]){
-        unilinks <- rbind(unilinks,c(links[i,1],links[i,2]))
+      if(degree=="both"){
+        type <- 1
+        degree <- matrix(0,0,0)
+      }else if(degree=="rows"){
+        type <- 2
+        degree <- colSums(mat)
+      }else{
+        type <- 3
+        degree <- rowSums(mat)
       }
-    }
 
-    if(length(unilinks)==0){unilinks <- NULL}else{unilinks <- unilinks-1}
-    if(length(bilinks)==0){bilinks <- NULL}else{bilinks <- bilinks-1}
+      links <- links-1
+      if(!is.null(f)){
+        results <- lapply(1:randomizations, function(x) f(randomize(mat, pmat, links, NULL, nperm, type, fprob, degree = degree),...))
+      }else{
+        results <- lapply(1:randomizations, function(x) randomize(mat, pmat, links, NULL, nperm, type, fprob, degree = degree))
+      }
 
-    if(!is.null(f)){
-      results <- lapply(1:randomizations, function(x) f(randomize(mat, pmat, unilinks, bilinks, nperm, type, fprob, degree = matrix(0,0,0)),...))
     }else{
-      results <- lapply(1:randomizations, function(x) randomize(mat, pmat, unilinks, bilinks, nperm, type, fprob, degree = matrix(0,0,0)))
+
+      type <- 0
+      if(!is.null(degree)){
+        warning("'degree' will be ignored because 'bipartite=FALSE'")
+      }
+
+      unilinks <- c()
+      bilinks <- c()
+
+      for(i in 1:nrow(links)){
+        if(links[i,1]==links[i,2]){
+          next
+        }else if(mat[links[i,1],links[i,2]]==mat[links[i,2],links[i,1]] & links[i,1]<links[i,2]){
+          bilinks <- rbind(bilinks,c(links[i,1],links[i,2]))
+        }else if(mat[links[i,1],links[i,2]]!=mat[links[i,2],links[i,1]]){
+          unilinks <- rbind(unilinks,c(links[i,1],links[i,2]))
+        }
+      }
+
+      if(length(unilinks)==0){unilinks <- NULL}else{unilinks <- unilinks-1}
+      if(length(bilinks)==0){bilinks <- NULL}else{bilinks <- bilinks-1}
+
+      if(!is.null(f)){
+        results <- lapply(1:randomizations, function(x) f(randomize(mat, pmat, unilinks, bilinks, nperm, type, fprob, degree = matrix(0,0,0)),...))
+      }else{
+        results <- lapply(1:randomizations, function(x) randomize(mat, pmat, unilinks, bilinks, nperm, type, fprob, degree = matrix(0,0,0)))
+      }
     }
   }
   ######################################################################################################

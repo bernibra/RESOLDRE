@@ -23,7 +23,7 @@ resoldre(mat = NULL, pmat = NULL, cormed = NULL, randomizations = 1, bipartite =
 
 \item{perspective}{this parameter can be set to either "rows" or "columns" . It specifies the perspective taken for the estimation of the probability matrix if 'pmat' is NULL and 'cormed' is set (see details).}
 
-\item{degree}{this parameter determines if the randomizations preserve the degree of "columns", "rows" or "both".}
+\item{degree}{this parameter determines if the randomizations preserve the degree of "columns", "rows", "both" or "sample".}
 
 \item{maxit}{a control parameter dictating the maximum number of iterations in the optimization.}
 
