@@ -12,4 +12,3 @@ Random matrix
 \description{
 Probabilistic randomization
 }
-

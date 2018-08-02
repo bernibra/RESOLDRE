@@ -13,4 +13,3 @@ The probability matrix
 \description{
 Probability estimation
 }
-

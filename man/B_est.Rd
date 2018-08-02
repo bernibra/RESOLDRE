@@ -9,4 +9,3 @@ B_est(Y, X, Zi, Zr, mur, B, br, XX, ss, tolpql, maxitpql)
 \description{
 B_estim
 }
-

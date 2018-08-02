@@ -46,4 +46,3 @@ This functions performs different type of randomization of an adjacency matrix g
 \details{
 Given an n x m adjacency matrix and an m x m correlation matrix relating its columns, resoldre will estimate the probability of encountering any of possible interactions based on the columns correlation matrix if 'perspective' is set as "columns". Similarly, if 'cormed' is otherwise an n x n correlation matrix relating the columns of the adjacency matrix, 'perspective' needs to be set as "rows".
 }
-

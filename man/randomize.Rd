@@ -12,4 +12,3 @@ randomize(x, pmat, unilinks_null, bilinks_null, N, type, fprob, degree)
 \description{
 Fill the matrix with ones
 }
-
