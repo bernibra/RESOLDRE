@@ -37,7 +37,7 @@
 #' @return The result of the randomization in some way...
 #' @export
 resoldre <- function(mat = NULL, pmat = NULL, cormed = NULL, randomizations = 1,
-                     bipartite = FALSE, seed=NULL, nperm=1, perspective="rows", degree=NULL,
+                     bipartite = FALSE, seed=NULL, nperm=1, perspective="rows", degree="sample",
                      maxit=40, ss=0.1, tolpql=10^-6, maxitpql=200, f=NULL, ...){
 
 
@@ -89,7 +89,7 @@ resoldre <- function(mat = NULL, pmat = NULL, cormed = NULL, randomizations = 1,
         if ((perspective=="rows" & nrow(cormed)!=nrow(mat)) | (perspective=="columns" & nrow(cormed)!=ncol(mat))){
           stop("The dimensions of 'cormed' must agree with 'perspective'.")
         }else{
-          pmat <- probability_estimation(mat=mat, vcv=cormed, perspective = perspective, maxit = maxit, ss = ss, tolpql = tolpql, maxitpql = maxitpql)
+          pmat <- probability_estimation(mat=mat, vcv=cormed, degree=degree, perspective=perspective, maxit=maxit, ss = ss, tolpql = tolpql, maxitpql = maxitpql)
         }
       }else{
         stop("'cormed' must be a square matrix.")

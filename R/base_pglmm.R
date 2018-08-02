@@ -56,7 +56,7 @@ pglmm <- function(Y, vcv, maxit=40, ss=0.1, tolpql=10^-6, maxitpql=200){
 #' Probability estimation
 #' @return The probability matrix
 #' @export
-probability_estimation <- function(mat, vcv, perspective = "rows", maxit=40, ss=0.01, tolpql=10^-6, maxitpql=200){
+probability_estimation <- function(mat, vcv, degree="sample", perspective = "rows", maxit=40, ss=0.01, tolpql=10^-6, maxitpql=200){
 
   sstry <- unique(c(ss,0.1,0.01,0.5,10^-5,10^-10))
 
@@ -72,8 +72,9 @@ probability_estimation <- function(mat, vcv, perspective = "rows", maxit=40, ss=
 
     if(n!=0){
       for(k in 1:length(sstry)){
-        result <- try(pglmm(Y = inter[,i], vcv = vcv, maxit = maxit, ss = sstry[k], tolpql = tolpql, maxitpql = maxitpql)*(1./n), TRUE)
+        result <- try(pglmm(Y = inter[,i], vcv = vcv, maxit = maxit, ss = sstry[k], tolpql = tolpql, maxitpql = maxitpql), TRUE)
         if (class(result) != "try-error"){
+          if (degree!="sample"){result <- result*(1./n)}
           prob <- cbind(prob, matrix(result, nrow(inter),1))
           break
         }
