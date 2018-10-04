@@ -96,6 +96,9 @@ resoldre <- function(mat = NULL, pmat = NULL, cormed = NULL, randomizations = 1,
       }
     }
   }
+  if(degree=="sample"){
+    stop("'pmat' must be a matrix with the same dimensions as 'mat'.")
+  }
 
   if(!is.null(seed)){
     set.seed(seed)
