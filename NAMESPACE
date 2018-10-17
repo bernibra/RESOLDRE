@@ -3,7 +3,6 @@
 export(pglmm)
 export(probability_estimation)
 export(psample)
-export(randomize)
 export(resoldre)
 importFrom(Rcpp,sourceCpp)
 useDynLib(RESOLDRE)
