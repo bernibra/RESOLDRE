@@ -57,7 +57,7 @@ double plmm_binary_LL(double par, const arma::colvec& H, const arma::colvec& X, 
   iV = arma::eye<arma::mat>(U.n_rows,U.n_rows) + iV;
 
   LL=log(std::abs(arma::det(iV))) - log(std::abs(arma::det(iA)));
-  if (isinf(LL)==1){
+  if (std::isinf(LL)==1){
     LL = 2 * accu(log(diagmat(arma::chol(iV)))) - log(std::abs(arma::det(iA)));
   }
 
@@ -93,7 +93,7 @@ long double B_est(const arma::colvec& Y, const arma::colvec& X, const arma::mat&
     b = C * iV * (Z - X * B);
     mu = exp(XX * b + X * B)/(1 + exp(XX * b + X * B));
     estBm = B;
-    if (isinf(B) | isnan(B)){
+    if (std::isinf(B) | std::isnan(B)){
       Rcpp:stop("Estimation of B failed. Check for lack of variation in Y. You could try with a smaller s2.init, but this might not help.");
     }
   }
