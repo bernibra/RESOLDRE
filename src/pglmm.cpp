@@ -38,6 +38,7 @@ arma::mat plmm_binary_V(double par, const arma::mat& Zi, const arma::colvec& St,
 
 }
 
+//'@export
 // [[Rcpp::export]]
 double plmm_binary_LL(double par, const arma::colvec& H, const arma::colvec& X, const arma::mat& Zi, const arma::colvec& mu) {
 
@@ -69,6 +70,7 @@ double plmm_binary_LL(double par, const arma::colvec& H, const arma::colvec& X, 
 
 //'B_estim
 //'
+//'@export
 // [[Rcpp::export]]
 long double B_est(const arma::colvec& Y, const arma::colvec& X, const arma::mat& Zi, Rcpp::NumericVector Zr, Rcpp::NumericVector mur, long double B, Rcpp::NumericVector br, const arma::mat& XX, double ss, double tolpql, int maxitpql){
   arma::colvec Z(Zr.begin(), Zr.size(), false);
