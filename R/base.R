@@ -143,9 +143,9 @@ resoldre <- function(mat = NULL, pmat = NULL, cormed = NULL, randomizations = 1,
 
       links <- links-1
       if(!is.null(f)){
-        results <- lapply(1:randomizations, function(x) f(randomize(mat, pmat, links, NULL, nperm, type, fprob, degree = degree),...))
+        results <- lapply(1:randomizations, function(x) f(RESOLDRE:::randomize(mat, pmat, links, NULL, nperm, type, fprob, degree = degree),...))
       }else{
-        results <- lapply(1:randomizations, function(x) randomize(mat, pmat, links, NULL, nperm, type, fprob, degree = degree))
+        results <- lapply(1:randomizations, function(x) RESOLDRE:::randomize(mat, pmat, links, NULL, nperm, type, fprob, degree = degree))
       }
 
     }else{
@@ -172,9 +172,9 @@ resoldre <- function(mat = NULL, pmat = NULL, cormed = NULL, randomizations = 1,
       if(length(bilinks)==0){bilinks <- NULL}else{bilinks <- bilinks-1}
 
       if(!is.null(f)){
-        results <- lapply(1:randomizations, function(x) f(randomize(mat, pmat, unilinks, bilinks, nperm, type, fprob, degree = matrix(0,0,0)),...))
+        results <- lapply(1:randomizations, function(x) f(RESOLDRE:::randomize(mat, pmat, unilinks, bilinks, nperm, type, fprob, degree = matrix(0,0,0)),...))
       }else{
-        results <- lapply(1:randomizations, function(x) randomize(mat, pmat, unilinks, bilinks, nperm, type, fprob, degree = matrix(0,0,0)))
+        results <- lapply(1:randomizations, function(x) RESOLDRE:::randomize(mat, pmat, unilinks, bilinks, nperm, type, fprob, degree = matrix(0,0,0)))
       }
     }
   }
