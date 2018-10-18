@@ -1,13 +1,12 @@
 //' @useDynLib RESOLDRE
 //' @importFrom Rcpp sourceCpp
 
-
-// [[Rcpp::depends(RcppArmadillo)]]
-
 #include "RcppArmadillo.h"
 #include <Rcpp.h>
 
 using namespace Rcpp;
+
+// [[Rcpp::depends(RcppArmadillo)]]
 
 // Checking a proposed single link swap. Preserve degree of both sides and the distribution of single, double and cannibal links.
 int check_unipartite_uniswap(NumericMatrix x, NumericMatrix pmat, double (*dfunc)(double,double,double,double), NumericMatrix links, int rn1, int rn2){
