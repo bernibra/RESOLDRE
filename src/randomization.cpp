@@ -1,12 +1,12 @@
 //' @useDynLib RESOLDRE
 //' @importFrom Rcpp sourceCpp
 
-#include "RcppArmadillo.h"
-#include <Rcpp.h>
-
-using namespace Rcpp;
 
 // [[Rcpp::depends(RcppArmadillo)]]
+
+#include "RcppArmadillo.h"
+
+using namespace Rcpp;
 
 // Checking a proposed single link swap. Preserve degree of both sides and the distribution of single, double and cannibal links.
 int check_unipartite_uniswap(NumericMatrix x, NumericMatrix pmat, double (*dfunc)(double,double,double,double), NumericMatrix links, int rn1, int rn2){
@@ -205,7 +205,12 @@ double probability_all(double p11, double p12, double p21, double p22){
   return 0.5*(p11*(1-p12)+p21*(1-p22));
 }
 
-//' @export
+
+//'Randomize unipartite networks
+//'
+//'Fill the matrix with ones
+//'@param x A matrix
+//'@export
 // [[Rcpp::export]]
 NumericMatrix randomize(NumericMatrix x, NumericMatrix pmat, Nullable<NumericMatrix> unilinks_null, Nullable<NumericMatrix> bilinks_null, int N, int type, int fprob, arma::vec degree){
 

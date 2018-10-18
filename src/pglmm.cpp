@@ -2,7 +2,6 @@
 //' @importFrom Rcpp sourceCpp
 
 #include "RcppArmadillo.h"
-#include <Rcpp.h>
 
 using namespace Rcpp;
 
@@ -39,6 +38,7 @@ arma::mat plmm_binary_V(double par, const arma::mat& Zi, const arma::colvec& St,
 
 }
 
+//'@export
 // [[Rcpp::export]]
 double plmm_binary_LL(double par, const arma::colvec& H, const arma::colvec& X, const arma::mat& Zi, const arma::colvec& mu) {
 
@@ -57,7 +57,7 @@ double plmm_binary_LL(double par, const arma::colvec& H, const arma::colvec& X, 
   iV = arma::eye<arma::mat>(U.n_rows,U.n_rows) + iV;
 
   LL=log(std::abs(arma::det(iV))) - log(std::abs(arma::det(iA)));
-  if (std::isinf(LL)==1){
+  if (isinf(LL)==1){
     LL = 2 * accu(log(diagmat(arma::chol(iV)))) - log(std::abs(arma::det(iA)));
   }
 
@@ -67,6 +67,10 @@ double plmm_binary_LL(double par, const arma::colvec& H, const arma::colvec& X, 
   return(LL);
 }
 
+
+//'B_estim
+//'
+//'@export
 // [[Rcpp::export]]
 long double B_est(const arma::colvec& Y, const arma::colvec& X, const arma::mat& Zi, Rcpp::NumericVector Zr, Rcpp::NumericVector mur, long double B, Rcpp::NumericVector br, const arma::mat& XX, double ss, double tolpql, int maxitpql){
   arma::colvec Z(Zr.begin(), Zr.size(), false);
@@ -89,7 +93,7 @@ long double B_est(const arma::colvec& Y, const arma::colvec& X, const arma::mat&
     b = C * iV * (Z - X * B);
     mu = exp(XX * b + X * B)/(1 + exp(XX * b + X * B));
     estBm = B;
-    if (std::isinf(B) | std::isnan(B)){
+    if (isinf(B) | isnan(B)){
       Rcpp:stop("Estimation of B failed. Check for lack of variation in Y. You could try with a smaller s2.init, but this might not help.");
     }
   }
