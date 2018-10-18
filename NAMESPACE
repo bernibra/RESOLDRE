@@ -3,6 +3,7 @@
 export(pglmm)
 export(probability_estimation)
 export(psample)
+export(randomize)
 export(resoldre)
 exportPattern("^[[:alpha:]]+")
 importFrom(Rcpp,evalCpp)
