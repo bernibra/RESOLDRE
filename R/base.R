@@ -15,7 +15,7 @@
 #' @param seed
 #' a single value setting a seed for the whole randomization process.
 #' @param nperm
-#' an integer value specifying the number of link swaps made by each randomization.
+#' an integer value specifying the number of randomization trials made by each randomization.
 #' @param perspective
 #' this parameter can be set to either "rows" or "columns" . It specifies the perspective taken for the estimation of the probability matrix if 'pmat' is NULL and 'cormed' is set (see details).
 #' @param degree

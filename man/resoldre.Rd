@@ -19,7 +19,7 @@ resoldre(mat = NULL, pmat = NULL, cormed = NULL, randomizations = 1, bipartite =
 
 \item{seed}{a single value setting a seed for the whole randomization process.}
 
-\item{nperm}{an integer value specifying the number of link swaps made by each randomization.}
+\item{nperm}{an integer value specifying the number of randomization trials made by each randomization.}
 
 \item{perspective}{this parameter can be set to either "rows" or "columns" . It specifies the perspective taken for the estimation of the probability matrix if 'pmat' is NULL and 'cormed' is set (see details).}
 

@@ -217,7 +217,7 @@ NumericMatrix randomize(NumericMatrix x, NumericMatrix pmat, Nullable<NumericMat
   GetRNGstate();
   double puni, pbi;
   double (*dfunc)(double,double,double,double);
-  int swaps=0;
+  int iter, swaps=0;
   NumericMatrix unilinks, bilinks, mat=Rcpp::clone(x);
 
   if (unilinks_null.isNotNull()) {
@@ -253,7 +253,7 @@ NumericMatrix randomize(NumericMatrix x, NumericMatrix pmat, Nullable<NumericMat
   if (type==0) {
     // type=0 -> Preserve degree of both sides and the distribution of single, double and cannibal links
 
-    while (swaps<N){
+    for (iter=0; iter<N; iter=iter+1){
       if(unif_rand()<puni){
         swaps=swaps+check_unipartite_uniswap(mat, pmat, dfunc, unilinks,randint(unilinks.nrow()),randint(unilinks.nrow()));
       } else{
@@ -264,7 +264,7 @@ NumericMatrix randomize(NumericMatrix x, NumericMatrix pmat, Nullable<NumericMat
   } else if (type==1){
     // type=1 -> Preserve degree of both sides
 
-    while (swaps<N){
+    for (iter=0; iter<N; iter=iter+1){
       swaps=swaps+check_bipartite_degree(mat, pmat, dfunc, unilinks,randint(unilinks.nrow()),randint(unilinks.nrow()));
     }
 
@@ -276,7 +276,7 @@ NumericMatrix randomize(NumericMatrix x, NumericMatrix pmat, Nullable<NumericMat
     // cumulative probabilities
     degree = arma::cumsum(degree);
 
-    while (swaps<N){
+    for (iter=0; iter<N; iter=iter+1){
       swaps=swaps+check_bipartite_rows(mat, pmat, unilinks,randint(unilinks.nrow()),sampl(mat.ncol(), degree, perm));
     }
 
@@ -288,7 +288,7 @@ NumericMatrix randomize(NumericMatrix x, NumericMatrix pmat, Nullable<NumericMat
     // cumulative probabilities
     degree = arma::cumsum(degree);
 
-    while (swaps<N){
+    for (iter=0; iter<N; iter=iter+1){
       swaps=swaps+check_bipartite_columns(mat, pmat, unilinks,randint(unilinks.nrow()),sampl(mat.nrow(), degree, perm));
     }
 
