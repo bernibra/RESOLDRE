@@ -80,7 +80,7 @@ probability_estimation <- function(mat, vcv, degree="sample", perspective = "row
         }
       }
       if (class(result) == "try-error"){
-        warning(paste("Estimation of B and ss failed. Check for lack of variation in Y. You could try with a smaller s2.init, but this might not help."))
+        # warning(paste("Estimation of B and ss failed. Check for lack of variation in Y. You could try with a smaller s2.init, but this might not help."))
         prob <- cbind(prob, matrix(rep(1.0/nrow(inter), nrow(inter)), nrow(inter),1))
       }
     } else {
