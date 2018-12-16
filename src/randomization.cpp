@@ -294,6 +294,10 @@ NumericMatrix randomize(NumericMatrix x, NumericMatrix pmat, Nullable<NumericMat
 
   }
 
+  if(swaps<2*(unilinks.nrow()+2*bilinks.nrow())){
+    Rcpp::warning("The number of permutations used is too small, we recommend to drastically increase the permutations to ensure convergence of the randomization process");
+  }
+
   PutRNGstate();
   //   return List::create(Named("matrix") = mat, Named("swaps") = swaps );
   return mat;
