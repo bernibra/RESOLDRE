@@ -4,7 +4,7 @@
 
 
 ## How to cite?
-To use this software, please make sure you cite Bramon Mora et. al. (*Unmasking common structural patterns in ecological data. Journal*, year).
+To use this software, please make sure you cite Bramon Mora et. al. (*Unmasking structural patterns in incidence matrices: an application to ecological data.* Journal of the Royal Society Interface, 2019).
 
 ## Installation instructions
 
