@@ -77,7 +77,7 @@ long double B_est(const arma::colvec& Y, const arma::colvec& X, const arma::mat&
   arma::colvec b(br.begin(), br.size(), false);
   arma::colvec mu(mur.begin(), mur.size(), false);
   long double estBm=B;
-  double oldestBm = 10^6;
+  double oldestBm = 1e6;
   arma::mat C;
   arma::mat iV;
   int itm = 0;
@@ -93,8 +93,8 @@ long double B_est(const arma::colvec& Y, const arma::colvec& X, const arma::mat&
     b = C * iV * (Z - X * B);
     mu = exp(XX * b + X * B)/(1 + exp(XX * b + X * B));
     estBm = B;
-    if (isinf(B) | isnan(B)){
-      Rcpp:stop("Estimation of B failed. Check for lack of variation in Y. You could try with a smaller s2.init, but this might not help.");
+    if (isinf(B) || isnan(B)){
+      Rcpp::stop("Estimation of B failed. Check for lack of variation in Y. You could try with a smaller s2.init, but this might not help.");
     }
   }
   Z = X * B + b + (Y - mu)/(mu % (1 - mu));
