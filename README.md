@@ -12,7 +12,10 @@ Installation should be relatively painless:
 
 you must clone the repository
 
-		git clone git@github.com:bernibra/RESOLDRE.git
+```{r}
+library(remotes)
+install_github('bernibra/RESOLDRE')
+```
 
 and build and install the package using R.
 
