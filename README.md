@@ -2,7 +2,6 @@
 
 **RESOLDRE** is an R package for generating “correlation-informed” null models, which combine the classic concept of null models and tools from joint statistical modeling in community ecology. Such models can be used to assess whether the information encoded within any given correlation matrix is predictive for explaining structural patterns observed within an incidence matrix.
 
-
 ## How to cite?
 To use this software, please make sure you cite Bramon Mora et. al. (*Unmasking structural patterns in incidence matrices: an application to ecological data.* Journal of the Royal Society Interface, 2019).
 
@@ -10,15 +9,12 @@ To use this software, please make sure you cite Bramon Mora et. al. (*Unmasking 
 
 Installation should be relatively painless:
 
-you must clone the repository
+you can install the R package with `remotes` as:
 
 ```{r}
 library(remotes)
 install_github('bernibra/RESOLDRE')
 ```
-
-and build and install the package using R.
-
 
 ## Data accessability
 
