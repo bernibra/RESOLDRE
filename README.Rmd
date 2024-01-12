@@ -49,7 +49,7 @@ heatmap(mat, Rowv = NA, Colv = NA, col= colorRampPalette(RColorBrewer::brewer.pa
 
 Notice that row 'c', just like in the manuscript, contains two links: (c-B) and (c-D). 
 
-Now let's invent a correlation matrix that reflects Figure 1 of the paper.
+Now let's make up a correlation matrix that reflects Figure 1 of the paper.
 
 ```{r 'cormat_matrix', eval = TRUE, message=FALSE, warning=FALSE, out.width="40%",  fig.align = 'center'}
 library(ggplot2)
@@ -66,7 +66,7 @@ heatmap(cormed)
 
 As you can see, columns A, B and D are highly correlated while being uncorrelated with C and E, and C and E are in turn highly correlated with each other. 
 
-The first thing we can do is check whether the probability values generated using the PGLMM (provided by the function `probability_estimation`) follow a similar profile to that of the example in Figure 1.
+The first thing we can do is check whether the probability values generated using the PGLMM (provided by function `probability_estimation`) follow a similar profile to that of the example in Figure 1.
 
 ```{r 'probability_profile', eval = TRUE, message=FALSE, warning=FALSE, out.width="30%",  fig.align = 'center'}
 library(RESOLDRE)
@@ -77,7 +77,7 @@ ggplot(data.frame(y = pmat[3,], x = colnames(mat)), aes(x=x, y=y))+
            theme(text = element_text(size = 25))
 ```
 
-Then, we can use the function `resoldre()` to randomize the matrix either using the new `pmat` or direclty imputing the correlation matrix `cormed`:
+Then, we can use the function `resoldre()` to randomize the matrix either using the new `pmat` or direclty using correlation matrix `cormed`:
 
 ```{r 'randomization', eval = F, message=FALSE, warning=FALSE}
 library(RESOLDRE)
@@ -86,7 +86,7 @@ rmat <- resoldre(mat = mat, cormed = cormed, perspective = "columns", bipartite 
 
 Notice that we use the option `bipartite = T` to indicate that this is not a square matrix. 
 
-For the sake of showcasing what the algorithm does, we can calculate the ratio between the number of times that we find the link (c-E) relative to the link (c-A) when using the informed randomized strategy and the uninformed strategy.
+For the sake of showcasing what the algorithm does, we can calculate the ratio between the number of times that we find the link (c-E) relative to the link (c-A) when using the informed and the uninformed randomization strategy.
 
 ```{r 'comparison', eval = TRUE, message=FALSE, warning=FALSE, out.width="30%",  fig.align = 'center'}
 library(dplyr)

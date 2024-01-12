@@ -51,7 +51,7 @@ heatmap(mat, Rowv = NA, Colv = NA, col= colorRampPalette(RColorBrewer::brewer.pa
 Notice that row ‘c’, just like in the manuscript, contains two links:
 (c-B) and (c-D).
 
-Now let’s invent a correlation matrix that reflects Figure 1 of the
+Now let’s make up a correlation matrix that reflects Figure 1 of the
 paper.
 
 ``` r
@@ -74,7 +74,7 @@ uncorrelated with C and E, and C and E are in turn highly correlated
 with each other.
 
 The first thing we can do is check whether the probability values
-generated using the PGLMM (provided by the function
+generated using the PGLMM (provided by function
 `probability_estimation`) follow a similar profile to that of the
 example in Figure 1.
 
@@ -90,7 +90,7 @@ ggplot(data.frame(y = pmat[3,], x = colnames(mat)), aes(x=x, y=y))+
 <img src="man/figures/README-probability_profile-1.png" width="30%" style="display: block; margin: auto;" />
 
 Then, we can use the function `resoldre()` to randomize the matrix
-either using the new `pmat` or direclty imputing the correlation matrix
+either using the new `pmat` or direclty using correlation matrix
 `cormed`:
 
 ``` r
@@ -103,8 +103,8 @@ not a square matrix.
 
 For the sake of showcasing what the algorithm does, we can calculate the
 ratio between the number of times that we find the link (c-E) relative
-to the link (c-A) when using the informed randomized strategy and the
-uninformed strategy.
+to the link (c-A) when using the informed and the uninformed
+randomization strategy.
 
 ``` r
 library(dplyr)
@@ -125,7 +125,7 @@ data.frame(
 
 |  informed | uninformed |
 |----------:|-----------:|
-| 0.0606469 |  0.4886751 |
+| 0.0752972 |  0.5094868 |
 
 As expected, the informed randomization strategy makes the appearance of
 the link (c-E) much less likely than in the uninformed strategy, as the
