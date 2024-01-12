@@ -271,8 +271,8 @@ NumericMatrix randomize(NumericMatrix x, NumericMatrix pmat, Nullable<NumericMat
   } else if (type==2){
     // type=2 -> Preserve row degree
 
-    arma::uvec perm = arma::sort_index(degree, 1); //descending sort of index
-    degree = arma::sort(degree, 1);  // descending sort of prob
+    arma::uvec perm = arma::sort_index(degree, "descend"); //descending sort of index
+    degree = arma::sort(degree, "descend");  // descending sort of prob
     // cumulative probabilities
     degree = arma::cumsum(degree);
 
@@ -283,8 +283,8 @@ NumericMatrix randomize(NumericMatrix x, NumericMatrix pmat, Nullable<NumericMat
   } else{
     // type=3 -> Preserve colum degree
 
-    arma::uvec perm = arma::sort_index(degree, 1); //descending sort of index
-    degree = arma::sort(degree, 1);  // descending sort of prob
+    arma::uvec perm = arma::sort_index(degree, "descend"); //descending sort of index
+    degree = arma::sort(degree, "descend");  // descending sort of prob
     // cumulative probabilities
     degree = arma::cumsum(degree);
 
