@@ -84,7 +84,7 @@ pglmm <- function(Y, vcv, maxit=40, ss=0.1, tolpql=10^-6, maxitpql=200){
 #' a control parameter dictating the maximum number of iterations in the PQL estimates of the mean components of the binomial GLMM (it's kind of unnecessary).
 #' @return The probability matrix
 #' @export
-probability_estimation <- function(mat, vcv, degree="sample", perspective = "rows", maxit=40, ss=0.01, tolpql=10^-6, maxitpql=200){
+probability_estimation <- function(mat, vcv, degree="both", perspective = "rows", maxit=40, ss=0.01, tolpql=10^-6, maxitpql=200){
 
   sstry <- unique(c(ss,0.1,0.01,0.5,10^-5,10^-10))
 
