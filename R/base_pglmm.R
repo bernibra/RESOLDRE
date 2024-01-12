@@ -1,6 +1,18 @@
 #' Base pglmm
 #'
-#' Probability estimation
+#' Runs phylogenetic generalized linerar model
+#' @param Y
+#' a column vector of 1s and 0s.
+#' @param vcv
+#' a variance covariance matrix for the pglmm estimation.
+#' @param maxit
+#' a control parameter dictating the maximum number of iterations in the optimization.
+#' @param ss
+#' initial estimates of the parameter for the random effect that scales the variance (it's kind of unnecessary).
+#' @param tolpql
+#' a control parameter dictating the tolerance for convergence in the PQL estimates of the mean components of the binomial GLMM (it's kind of unnecessary).
+#' @param maxitpql
+#' a control parameter dictating the maximum number of iterations in the PQL estimates of the mean components of the binomial GLMM (it's kind of unnecessary).
 #' @return The probability matrix
 #' @export
 pglmm <- function(Y, vcv, maxit=40, ss=0.1, tolpql=10^-6, maxitpql=200){
@@ -53,7 +65,23 @@ pglmm <- function(Y, vcv, maxit=40, ss=0.1, tolpql=10^-6, maxitpql=200){
 
 #' Probability estimation
 #'
-#' Probability estimation
+#' Estimates a probability matrix from an incidence matrix and a variance covariance matrix.
+#' @param mat
+#' an incidence matrix.
+#' @param vcv
+#' a variance covariance matrix for the pglmm estimation.
+#' @param perspective
+#' this parameter can be set to either "rows" or "columns" . It specifies the perspective taken for the estimation of the probability matrix if 'pmat' is NULL and 'cormed' is set (see details).
+#' @param degree
+#' this parameter determines if the randomizations preserve the degree of "columns", "rows", "both" or "sample".
+#' @param maxit
+#' a control parameter dictating the maximum number of iterations in the optimization.
+#' @param ss
+#' initial estimates of the parameter for the random effect that scales the variance (it's kind of unnecessary).
+#' @param tolpql
+#' a control parameter dictating the tolerance for convergence in the PQL estimates of the mean components of the binomial GLMM (it's kind of unnecessary).
+#' @param maxitpql
+#' a control parameter dictating the maximum number of iterations in the PQL estimates of the mean components of the binomial GLMM (it's kind of unnecessary).
 #' @return The probability matrix
 #' @export
 probability_estimation <- function(mat, vcv, degree="sample", perspective = "rows", maxit=40, ss=0.01, tolpql=10^-6, maxitpql=200){

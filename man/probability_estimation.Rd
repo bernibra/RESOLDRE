@@ -4,13 +4,37 @@
 \alias{probability_estimation}
 \title{Probability estimation}
 \usage{
-probability_estimation(mat, vcv, degree = "sample",
-  perspective = "rows", maxit = 40, ss = 0.01, tolpql = 10^-6,
-  maxitpql = 200)
+probability_estimation(
+  mat,
+  vcv,
+  degree = "sample",
+  perspective = "rows",
+  maxit = 40,
+  ss = 0.01,
+  tolpql = 10^-6,
+  maxitpql = 200
+)
+}
+\arguments{
+\item{mat}{an incidence matrix.}
+
+\item{vcv}{a variance covariance matrix for the pglmm estimation.}
+
+\item{degree}{this parameter determines if the randomizations preserve the degree of "columns", "rows", "both" or "sample".}
+
+\item{perspective}{this parameter can be set to either "rows" or "columns" . It specifies the perspective taken for the estimation of the probability matrix if 'pmat' is NULL and 'cormed' is set (see details).}
+
+\item{maxit}{a control parameter dictating the maximum number of iterations in the optimization.}
+
+\item{ss}{initial estimates of the parameter for the random effect that scales the variance (it's kind of unnecessary).}
+
+\item{tolpql}{a control parameter dictating the tolerance for convergence in the PQL estimates of the mean components of the binomial GLMM (it's kind of unnecessary).}
+
+\item{maxitpql}{a control parameter dictating the maximum number of iterations in the PQL estimates of the mean components of the binomial GLMM (it's kind of unnecessary).}
 }
 \value{
 The probability matrix
 }
 \description{
-Probability estimation
+Estimates a probability matrix from an incidence matrix and a variance covariance matrix.
 }

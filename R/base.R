@@ -1,9 +1,9 @@
 #' Informed Randomizations
 #'
 #' This functions performs different type of randomization of an adjacency matrix given either a probability or a correlation matrix.
-#' @usage resoldre(mat = NULL, pmat = NULL, cormed = NULL, randomizations = 1, bipartite = FALSE, seed=NULL, nperm=1, perspective="rows", degree=NULL, maxit=40, ss=0.1, tolpql=10^-6, maxitpql=200, f=NULL, ...)
+#' @usage resoldre(mat = NULL, pmat = NULL, cormed = NULL, randomizations = 1, bipartite = FALSE, seed=NULL, nperm=1, perspective="rows", degree="both", maxit=40, ss=0.1, tolpql=10^-6, maxitpql=200, f=NULL, ...)
 #' @param mat
-#' an adjacency matrix to be randomized.
+#' an incidence matrix to be randomized.
 #' @param pmat
 #' an optional probability matrix defining the probability of encountering any of the possible interactions in the adjacency matrix. This should be unset if a correlation matrix is specified. If 'pmat' and 'cormed' are unset, this probability matrix is considered to be an all-ones matrix.
 #' @param cormed
@@ -37,7 +37,7 @@
 #' @return The result of the randomization in some way...
 #' @export
 resoldre <- function(mat = NULL, pmat = NULL, cormed = NULL, randomizations = 1,
-                     bipartite = FALSE, seed=NULL, nperm=1, perspective="rows", degree="sample",
+                     bipartite = FALSE, seed=NULL, nperm=1, perspective="rows", degree="both",
                      maxit=40, ss=0.1, tolpql=10^-6, maxitpql=200, f=NULL, ...){
 
 

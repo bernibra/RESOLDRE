@@ -6,9 +6,22 @@
 \usage{
 pglmm(Y, vcv, maxit = 40, ss = 0.1, tolpql = 10^-6, maxitpql = 200)
 }
+\arguments{
+\item{Y}{a column vector of 1s and 0s.}
+
+\item{vcv}{a variance covariance matrix for the pglmm estimation.}
+
+\item{maxit}{a control parameter dictating the maximum number of iterations in the optimization.}
+
+\item{ss}{initial estimates of the parameter for the random effect that scales the variance (it's kind of unnecessary).}
+
+\item{tolpql}{a control parameter dictating the tolerance for convergence in the PQL estimates of the mean components of the binomial GLMM (it's kind of unnecessary).}
+
+\item{maxitpql}{a control parameter dictating the maximum number of iterations in the PQL estimates of the mean components of the binomial GLMM (it's kind of unnecessary).}
+}
 \value{
 The probability matrix
 }
 \description{
-Probability estimation
+Runs phylogenetic generalized linerar model
 }

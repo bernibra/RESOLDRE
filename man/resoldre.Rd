@@ -4,10 +4,10 @@
 \alias{resoldre}
 \title{Informed Randomizations}
 \usage{
-resoldre(mat = NULL, pmat = NULL, cormed = NULL, randomizations = 1, bipartite = FALSE, seed=NULL, nperm=1, perspective="rows", degree=NULL, maxit=40, ss=0.1, tolpql=10^-6, maxitpql=200, f=NULL, ...)
+resoldre(mat = NULL, pmat = NULL, cormed = NULL, randomizations = 1, bipartite = FALSE, seed=NULL, nperm=1, perspective="rows", degree="both", maxit=40, ss=0.1, tolpql=10^-6, maxitpql=200, f=NULL, ...)
 }
 \arguments{
-\item{mat}{an adjacency matrix to be randomized.}
+\item{mat}{an incidence matrix to be randomized.}
 
 \item{pmat}{an optional probability matrix defining the probability of encountering any of the possible interactions in the adjacency matrix. This should be unset if a correlation matrix is specified. If 'pmat' and 'cormed' are unset, this probability matrix is considered to be an all-ones matrix.}
 

@@ -210,7 +210,7 @@ double probability_all(double p11, double p12, double p21, double p22){
 //'
 //'Fill the matrix with ones
 //'@param x A matrix
-//'@export
+//' @noRd
 // [[Rcpp::export]]
 NumericMatrix randomize(NumericMatrix x, NumericMatrix pmat, Nullable<NumericMatrix> unilinks_null, Nullable<NumericMatrix> bilinks_null, int N, int type, int fprob, arma::vec degree){
 
