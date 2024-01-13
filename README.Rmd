@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# RESOLDRE
+# RESOLDRE [![](https://badgen.net/badge/DOI/10.1098%2Frsif.2018.0747/purple)](https://doi.org/10.1098/rsif.2018.0747)
 
 **RESOLDRE** is an R package for generating “correlation-informed” null models, which combine the classic concept of null models and tools from joint statistical modeling in community ecology. Such models can be used to assess whether the information encoded within any given correlation matrix is predictive for explaining structural patterns observed within an incidence matrix.
 
