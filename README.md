@@ -4,7 +4,7 @@
         - https://github.com/LieberInstitute/spatialLIBD/blob/devel/README.Rmd
 -->
 
-## RESOLDRE
+# RESOLDRE
 
 **RESOLDRE** is an R package for generating “correlation-informed” null
 models, which combine the classic concept of null models and tools from
@@ -125,7 +125,7 @@ data.frame(
 
 |  informed | uninformed |
 |----------:|-----------:|
-| 0.0752972 |  0.5094868 |
+| 0.0843215 |  0.4895172 |
 
 As expected, the informed randomization strategy makes the appearance of
 the link (c-E) much less likely than in the uninformed strategy, as the
