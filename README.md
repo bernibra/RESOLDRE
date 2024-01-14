@@ -125,7 +125,7 @@ data.frame(
 
 |  informed | uninformed |
 |----------:|-----------:|
-| 0.0711563 |  0.4678593 |
+| 0.0745192 |   0.485017 |
 
 As expected, the informed randomization strategy makes the appearance of
 the link (c-E) much less likely than in the uninformed strategy, as the
